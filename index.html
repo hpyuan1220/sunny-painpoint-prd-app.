@@ -1,0 +1,1044 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Sunny Pain Point to PRD Workshop</title>
+  <style>
+    :root {
+      --ink: #18212f;
+      --muted: #667085;
+      --line: #d9dee7;
+      --panel: #ffffff;
+      --wash: #f5f7fb;
+      --blue: #2f6cb4;
+      --green: #157f5f;
+      --amber: #b76e00;
+      --red: #bd3b3b;
+      --teal: #dff5ef;
+      --sky: #e8f1ff;
+      --sun: #fff0d2;
+      --rose: #ffe8e8;
+      --shadow: 0 16px 40px rgba(24, 33, 47, 0.08);
+      font-family: Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+    }
+
+    * { box-sizing: border-box; }
+    body {
+      margin: 0;
+      color: var(--ink);
+      background: var(--wash);
+    }
+
+    button, input, textarea, select {
+      font: inherit;
+    }
+
+    .app {
+      min-height: 100vh;
+      display: grid;
+      grid-template-columns: 280px minmax(0, 1fr);
+    }
+
+    aside {
+      background: #101828;
+      color: #f9fafb;
+      padding: 24px 18px;
+      position: sticky;
+      top: 0;
+      height: 100vh;
+      overflow: auto;
+    }
+
+    .brand {
+      display: grid;
+      gap: 6px;
+      margin-bottom: 22px;
+    }
+
+    .brand strong {
+      font-size: 18px;
+      line-height: 1.25;
+    }
+
+    .brand span {
+      color: #cbd5e1;
+      font-size: 13px;
+      line-height: 1.45;
+    }
+
+    .steps {
+      display: grid;
+      gap: 8px;
+    }
+
+    .step-tab {
+      width: 100%;
+      border: 0;
+      border-radius: 6px;
+      background: transparent;
+      color: #d0d5dd;
+      display: grid;
+      grid-template-columns: 28px 1fr;
+      align-items: center;
+      gap: 10px;
+      padding: 10px;
+      text-align: left;
+      cursor: pointer;
+    }
+
+    .step-tab:hover { background: rgba(255,255,255,0.08); }
+    .step-tab.active {
+      background: #ffffff;
+      color: #101828;
+    }
+
+    .step-index {
+      width: 28px;
+      height: 28px;
+      display: inline-grid;
+      place-items: center;
+      border-radius: 50%;
+      background: rgba(255,255,255,0.16);
+      font-weight: 700;
+      font-size: 13px;
+    }
+
+    .step-tab.active .step-index {
+      background: var(--blue);
+      color: #fff;
+    }
+
+    main {
+      min-width: 0;
+      padding: 28px;
+    }
+
+    .topbar {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 14px;
+      margin-bottom: 18px;
+    }
+
+    h1 {
+      margin: 0;
+      font-size: 28px;
+      line-height: 1.2;
+      letter-spacing: 0;
+    }
+
+    .subtitle {
+      margin: 6px 0 0;
+      color: var(--muted);
+      line-height: 1.45;
+    }
+
+    .actions {
+      display: flex;
+      gap: 8px;
+      flex-wrap: wrap;
+      justify-content: flex-end;
+    }
+
+    .btn {
+      border: 1px solid var(--line);
+      background: #fff;
+      color: var(--ink);
+      border-radius: 6px;
+      min-height: 40px;
+      padding: 0 12px;
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      white-space: nowrap;
+    }
+
+    .btn:hover { border-color: #98a2b3; }
+    .btn.primary {
+      background: var(--blue);
+      border-color: var(--blue);
+      color: #fff;
+    }
+
+    .btn.good {
+      background: var(--green);
+      border-color: var(--green);
+      color: #fff;
+    }
+
+    .grid {
+      display: grid;
+      grid-template-columns: minmax(0, 1.15fr) minmax(300px, 0.85fr);
+      gap: 18px;
+      align-items: start;
+    }
+
+    .panel {
+      background: var(--panel);
+      border: 1px solid var(--line);
+      border-radius: 8px;
+      box-shadow: var(--shadow);
+    }
+
+    .panel-header {
+      border-bottom: 1px solid var(--line);
+      padding: 18px 20px;
+    }
+
+    .panel-header h2 {
+      margin: 0;
+      font-size: 20px;
+      line-height: 1.25;
+    }
+
+    .panel-header p {
+      margin: 7px 0 0;
+      color: var(--muted);
+      line-height: 1.5;
+    }
+
+    .panel-body {
+      padding: 20px;
+      display: grid;
+      gap: 16px;
+    }
+
+    label {
+      display: grid;
+      gap: 7px;
+      font-weight: 700;
+      line-height: 1.35;
+    }
+
+    label span {
+      color: var(--muted);
+      font-weight: 500;
+      font-size: 13px;
+    }
+
+    textarea, input, select {
+      width: 100%;
+      border: 1px solid var(--line);
+      border-radius: 6px;
+      padding: 12px;
+      color: var(--ink);
+      background: #fff;
+      line-height: 1.45;
+    }
+
+    textarea {
+      min-height: 110px;
+      resize: vertical;
+    }
+
+    textarea.big { min-height: 260px; }
+    textarea.prd { min-height: 520px; font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace; font-size: 13px; }
+
+    .two {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 12px;
+    }
+
+    .callout {
+      border-radius: 8px;
+      padding: 14px;
+      line-height: 1.5;
+      border: 1px solid transparent;
+    }
+
+    .callout strong {
+      display: block;
+      margin-bottom: 4px;
+    }
+
+    .callout.sky { background: var(--sky); border-color: #c9dcff; }
+    .callout.teal { background: var(--teal); border-color: #bce9dc; }
+    .callout.sun { background: var(--sun); border-color: #ffd999; }
+    .callout.rose { background: var(--rose); border-color: #ffc9c9; }
+
+    .helper-list {
+      display: grid;
+      gap: 10px;
+      margin: 0;
+      padding: 0;
+      list-style: none;
+    }
+
+    .helper-list li {
+      border: 1px solid var(--line);
+      border-radius: 6px;
+      padding: 10px 12px;
+      background: #fff;
+      line-height: 1.45;
+    }
+
+    .checks {
+      display: grid;
+      gap: 10px;
+    }
+
+    .check-row {
+      display: grid;
+      grid-template-columns: 1fr 84px;
+      gap: 10px;
+      align-items: center;
+      padding: 10px 0;
+      border-bottom: 1px solid #eef1f5;
+    }
+
+    .check-row:last-child { border-bottom: 0; }
+
+    .score {
+      font-weight: 800;
+      font-size: 34px;
+      line-height: 1;
+    }
+
+    .score.good { color: var(--green); }
+    .score.warn { color: var(--amber); }
+    .score.bad { color: var(--red); }
+
+    .status {
+      border-radius: 999px;
+      padding: 4px 10px;
+      font-size: 12px;
+      font-weight: 800;
+      width: fit-content;
+    }
+
+    .status.good { background: var(--teal); color: #07513c; }
+    .status.warn { background: var(--sun); color: #7a4b00; }
+    .status.bad { background: var(--rose); color: #8a2424; }
+
+    .footer-nav {
+      margin-top: 18px;
+      display: flex;
+      justify-content: space-between;
+      gap: 12px;
+    }
+
+    .hidden { display: none; }
+
+    @media (max-width: 980px) {
+      .app { grid-template-columns: 1fr; }
+      aside {
+        position: static;
+        height: auto;
+      }
+      .steps {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+      }
+      .grid {
+        grid-template-columns: 1fr;
+      }
+      .topbar {
+        align-items: flex-start;
+        flex-direction: column;
+      }
+      .actions { justify-content: flex-start; }
+    }
+
+    @media (max-width: 620px) {
+      main { padding: 18px; }
+      .steps { grid-template-columns: 1fr; }
+      .two { grid-template-columns: 1fr; }
+      h1 { font-size: 24px; }
+    }
+  </style>
+</head>
+<body>
+  <div class="app">
+    <aside>
+      <div class="brand">
+        <strong>Sunny Pain Point Workshop</strong>
+        <span>Find a real pain point first. Then generate a basic AI project PRD.</span>
+      </div>
+      <nav class="steps" id="stepTabs" aria-label="Workshop steps"></nav>
+    </aside>
+
+    <main>
+      <div class="topbar">
+        <div>
+          <h1 id="pageTitle">Pain Point to AI PRD</h1>
+          <p class="subtitle" id="pageSubtitle">A classroom app for Sunny’s workshop flow.</p>
+        </div>
+        <div class="actions">
+          <button class="btn" id="loadExampleBtn" type="button" title="Fill the補習班 example">Example</button>
+          <button class="btn" id="clearBtn" type="button" title="Clear all saved answers">Reset</button>
+          <button class="btn primary" id="generateTopBtn" type="button" title="Generate PRD">Generate PRD</button>
+        </div>
+      </div>
+
+      <section class="grid">
+        <div class="panel">
+          <div class="panel-header">
+            <h2 id="stepTitle"></h2>
+            <p id="stepIntro"></p>
+          </div>
+          <div class="panel-body" id="stepContent"></div>
+        </div>
+
+        <div class="panel">
+          <div class="panel-header">
+            <h2>Sunny Coach</h2>
+            <p>Prompt reminders, interaction ideas, and next action.</p>
+          </div>
+          <div class="panel-body" id="coachPanel"></div>
+        </div>
+      </section>
+
+      <div class="footer-nav">
+        <button class="btn" id="prevBtn" type="button">Back</button>
+        <button class="btn primary" id="nextBtn" type="button">Next</button>
+      </div>
+    </main>
+  </div>
+
+  <script>
+    const STORAGE_KEY = "sunnyPainPrdWorkshop.v1";
+
+    const defaultState = {
+      step: 0,
+      painSentence: "",
+      audienceNotes: "",
+      exampleContext: "",
+      selectedTool: "ChatGPT Deep Research",
+      firstPrompt: "",
+      aiResearch: "",
+      followupPrompt: "",
+      painTable: "",
+      scores: {
+        userSpecificity: 3,
+        frequency: 3,
+        painIntensity: 3,
+        currentDissatisfaction: 3,
+        evidenceCredibility: 3
+      },
+      prd: ""
+    };
+
+    const steps = [
+      {
+        label: "Write Pain",
+        title: "Step 1: Turn a complaint into a pain sentence",
+        intro: "Students write one specific repeated pain before touching product ideas."
+      },
+      {
+        label: "Choose Tool",
+        title: "Step 2: Choose the right AI research tool",
+        intro: "Pick the tool based on whether the input is a vague topic, long private text, or external research."
+      },
+      {
+        label: "Research Prompt",
+        title: "Step 3: Build and check the Deep Research prompt",
+        intro: "The prompt must ask for pain evidence, not app ideas, MVPs, or business models."
+      },
+      {
+        label: "AI Output",
+        title: "Step 4: Paste AI research and ask follow-up",
+        intro: "Use AI output as a map. Then push it to become concrete and useful."
+      },
+      {
+        label: "Score Pain",
+        title: "Step 5: Pain Quality Score",
+        intro: "Score the pain before deciding whether it deserves more research."
+      },
+      {
+        label: "PRD",
+        title: "Step 6: Generate basic AI project PRD",
+        intro: "The PRD is a first draft for learning and discussion, not a full business plan."
+      }
+    ];
+
+    let state = loadState();
+
+    function loadState() {
+      try {
+        const saved = JSON.parse(localStorage.getItem(STORAGE_KEY));
+        return { ...structuredClone(defaultState), ...saved, scores: { ...defaultState.scores, ...(saved?.scores || {}) } };
+      } catch {
+        return structuredClone(defaultState);
+      }
+    }
+
+    function saveState() {
+      localStorage.setItem(STORAGE_KEY, JSON.stringify(state));
+    }
+
+    function el(tag, attrs = {}, children = []) {
+      const node = document.createElement(tag);
+      Object.entries(attrs).forEach(([key, value]) => {
+        if (key === "class") node.className = value;
+        else if (key === "text") node.textContent = value;
+        else if (key.startsWith("on")) node.addEventListener(key.slice(2), value);
+        else node.setAttribute(key, value);
+      });
+      children.forEach(child => node.append(child));
+      return node;
+    }
+
+    function field(label, key, options = {}) {
+      const input = el(options.type === "input" ? "input" : "textarea", {
+        value: state[key] || "",
+        placeholder: options.placeholder || "",
+        class: options.big ? "big" : "",
+        oninput: event => {
+          state[key] = event.target.value;
+          if (key === "painSentence" && !state.firstPrompt.trim()) {
+            state.firstPrompt = buildResearchPrompt();
+          }
+          saveState();
+          renderCoach();
+        }
+      });
+      return el("label", {}, [
+        document.createTextNode(label),
+        options.help ? el("span", { text: options.help }) : document.createTextNode(""),
+        input
+      ]);
+    }
+
+    function renderTabs() {
+      const nav = document.getElementById("stepTabs");
+      nav.innerHTML = "";
+      steps.forEach((step, index) => {
+        const tab = el("button", {
+          class: `step-tab ${index === state.step ? "active" : ""}`,
+          type: "button",
+          onclick: () => {
+            state.step = index;
+            saveState();
+            render();
+          }
+        }, [
+          el("span", { class: "step-index", text: String(index + 1) }),
+          el("span", { text: step.label })
+        ]);
+        nav.append(tab);
+      });
+    }
+
+    function render() {
+      const current = steps[state.step];
+      document.getElementById("stepTitle").textContent = current.title;
+      document.getElementById("stepIntro").textContent = current.intro;
+      document.getElementById("prevBtn").disabled = state.step === 0;
+      document.getElementById("nextBtn").textContent = state.step === steps.length - 1 ? "Stay Here" : "Next";
+      renderTabs();
+      renderStep();
+      renderCoach();
+    }
+
+    function renderStep() {
+      const root = document.getElementById("stepContent");
+      root.innerHTML = "";
+
+      if (state.step === 0) {
+        root.append(
+          field("Your pain sentence", "painSentence", {
+            help: "Use Sunny’s format: I every time need to ____, but I get stuck at ____.",
+            placeholder: "Example: Every Friday I need to turn student learning notes into parent updates, but I get stuck rewriting the same messages for 40 students."
+          }),
+          field("Audience notes", "audienceNotes", {
+            help: "During class, write what classmates say, who feels this pain, and what seems specific.",
+            placeholder: "Who shared a similar pain? What words did they use?"
+          }),
+          field("Concrete example context", "exampleContext", {
+            help: "Add details: who, when, frequency, current method, time cost, emotion cost.",
+            placeholder: "Target user, frequency, current solution, cost..."
+          })
+        );
+      }
+
+      if (state.step === 1) {
+        const select = el("select", {
+          onchange: event => {
+            state.selectedTool = event.target.value;
+            saveState();
+            renderCoach();
+          }
+        }, [
+          option("ChatGPT Deep Research"),
+          option("Claude"),
+          option("Perplexity / Gemini Deep Research")
+        ]);
+        select.value = state.selectedTool;
+        root.append(
+          el("label", {}, [document.createTextNode("Selected tool"), el("span", { text: "Sunny recommends ChatGPT Deep Research for a vague pain topic." }), select]),
+          callout("ChatGPT Deep Research", "Use when students start with a rough pain sentence and need public evidence, user groups, current solutions, and next interview questions.", "sky"),
+          callout("Claude", "Use when students already have long private text: interviews, Line messages, survey responses, class notes, or customer service logs.", "teal"),
+          callout("Perplexity / Gemini Deep Research", "Use when students need quick external sources, industry articles, search trends, or competitor clues.", "sun")
+        );
+      }
+
+      if (state.step === 2) {
+        if (!state.firstPrompt.trim()) state.firstPrompt = buildResearchPrompt();
+        root.append(
+          el("div", { class: "actions" }, [
+            el("button", { class: "btn", type: "button", onclick: () => { state.firstPrompt = buildResearchPrompt(); saveState(); render(); } }, [document.createTextNode("Fill Sunny Prompt")]),
+            el("button", { class: "btn", type: "button", onclick: copyFirstPrompt }, [document.createTextNode("Copy Prompt")])
+          ]),
+          field("Deep Research prompt", "firstPrompt", {
+            big: true,
+            help: "Students can edit this. The app will remind them if it asks for the wrong thing."
+          })
+        );
+      }
+
+      if (state.step === 3) {
+        root.append(
+          field("Paste AI research output", "aiResearch", {
+            big: true,
+            help: "Paste the report from ChatGPT Deep Research, or summarize the important parts."
+          }),
+          el("div", { class: "actions" }, [
+            el("button", { class: "btn", type: "button", onclick: () => { state.followupPrompt = buildFollowupPrompt(); saveState(); render(); } }, [document.createTextNode("Fill Follow-up Prompt")]),
+            el("button", { class: "btn", type: "button", onclick: copyFollowupPrompt }, [document.createTextNode("Copy Follow-up")])
+          ]),
+          field("Follow-up prompt", "followupPrompt", {
+            help: "Use this to force the AI to organize the report into a pain judgment table.",
+            placeholder: buildFollowupPrompt()
+          }),
+          field("Pain judgment table or notes", "painTable", {
+            big: true,
+            help: "Paste the AI’s table or write your own interpretation."
+          })
+        );
+      }
+
+      if (state.step === 4) {
+        root.append(
+          scoreRow("User group specificity", "userSpecificity", "Can you clearly name the group that has this pain?"),
+          scoreRow("Frequency", "frequency", "Does it happen repeatedly enough to matter?"),
+          scoreRow("Pain intensity", "painIntensity", "Is there meaningful time, money, emotion, or risk cost?"),
+          scoreRow("Current solution dissatisfaction", "currentDissatisfaction", "Are current methods still annoying, expensive, unreliable, or manual?"),
+          scoreRow("Evidence credibility", "evidenceCredibility", "Do multiple sources support it, not just your own feeling?")
+        );
+      }
+
+      if (state.step === 5) {
+        root.append(
+          el("div", { class: "actions" }, [
+            el("button", { class: "btn primary", type: "button", onclick: generatePrd }, [document.createTextNode("Generate PRD")]),
+            el("button", { class: "btn", type: "button", onclick: copyPrd }, [document.createTextNode("Copy PRD")]),
+            el("button", { class: "btn good", type: "button", onclick: downloadPrd }, [document.createTextNode("Save .md")])
+          ]),
+          el("label", {}, [
+            document.createTextNode("Basic AI project PRD"),
+            el("span", { text: "Generated from Sunny’s pain discovery steps. Students should still validate with real interviews." }),
+            el("textarea", {
+              class: "prd",
+              value: state.prd || "",
+              placeholder: "Click Generate PRD after completing the workshop steps.",
+              oninput: event => {
+                state.prd = event.target.value;
+                saveState();
+              }
+            })
+          ])
+        );
+      }
+    }
+
+    function option(text) {
+      return el("option", { value: text, text });
+    }
+
+    function callout(title, text, tone) {
+      return el("div", { class: `callout ${tone}` }, [
+        el("strong", { text: title }),
+        document.createTextNode(text)
+      ]);
+    }
+
+    function scoreRow(title, key, help) {
+      const select = el("select", {
+        onchange: event => {
+          state.scores[key] = Number(event.target.value);
+          saveState();
+          renderCoach();
+        }
+      }, [1,2,3,4,5].map(num => option(String(num))));
+      select.value = String(state.scores[key]);
+      return el("div", { class: "check-row" }, [
+        el("div", {}, [
+          el("strong", { text: title }),
+          el("div", { class: "subtitle", text: help })
+        ]),
+        select
+      ]);
+    }
+
+    function renderCoach() {
+      const root = document.getElementById("coachPanel");
+      root.innerHTML = "";
+
+      if (state.step === 0) {
+        root.append(
+          callout("Workshop move", "Ask 2–3 students to read their sentence. Help them add who, when, frequency, and cost.", "sky"),
+          checklist([
+            hasSpecificWho(state.painSentence) ? "Has a user group signal" : "Add a specific person or group",
+            hasFrequency(state.painSentence + " " + state.exampleContext) ? "Has frequency signal" : "Add how often it happens",
+            hasCost(state.painSentence + " " + state.exampleContext) ? "Has cost signal" : "Add time, money, emotion, or risk cost"
+          ])
+        );
+      }
+
+      if (state.step === 1) {
+        root.append(
+          callout("Tool reminder", toolReminder(), "teal"),
+          checklist([
+            "Vague pain topic → ChatGPT Deep Research",
+            "Long private text → Claude",
+            "Need quick sources → Perplexity / Gemini"
+          ])
+        );
+      }
+
+      if (state.step === 2) {
+        const report = analyzePrompt(state.firstPrompt);
+        root.append(
+          promptScore(report),
+          checklist(report.messages)
+        );
+      }
+
+      if (state.step === 3) {
+        root.append(
+          callout("Sunny check", "Do not read the whole AI report. Look for people, scenes, current solutions, evidence, and fake-pain warnings.", "sun"),
+          checklist([
+            state.aiResearch.length > 300 ? "AI research pasted" : "Paste more AI research detail",
+            state.followupPrompt.trim() ? "Follow-up prompt ready" : "Use the follow-up prompt to make the report concrete",
+            state.painTable.length > 120 ? "Pain table or notes captured" : "Add the pain judgment table or your own notes"
+          ])
+        );
+      }
+
+      if (state.step === 4) {
+        const total = totalScore();
+        root.append(
+          el("div", { class: `score ${scoreClass(total)}`, text: String(total) }),
+          el("div", { class: `status ${scoreClass(total)}`, text: scoreLabel(total) }),
+          callout("Decision", scoreDecision(total), total >= 20 ? "teal" : total >= 15 ? "sun" : "rose")
+        );
+      }
+
+      if (state.step === 5) {
+        root.append(
+          callout("PRD scope", "This PRD is a basic AI project brief based on pain discovery. It intentionally avoids pricing and business model.", "sky"),
+          checklist([
+            totalScore() >= 15 ? "Pain score is usable for a draft PRD" : "Pain score is low; mark the PRD as exploratory",
+            state.painSentence.trim() ? "Pain sentence included" : "Missing pain sentence",
+            state.painTable.trim() || state.aiResearch.trim() ? "Research notes included" : "Missing research notes"
+          ])
+        );
+      }
+    }
+
+    function checklist(items) {
+      return el("ul", { class: "helper-list" }, items.map(item => el("li", { text: item })));
+    }
+
+    function toolReminder() {
+      if (state.selectedTool === "Claude") return "Use Claude when students bring their own interview notes, Line messages, or long documents.";
+      if (state.selectedTool === "Perplexity / Gemini Deep Research") return "Use this when the class needs quick source trails, external articles, and market signals.";
+      return "Good choice for the workshop demo: start from one pain sentence and ask for evidence.";
+    }
+
+    function hasSpecificWho(text) {
+      return /(teacher|student|parent|manager|assistant|owner|sales|customer|老師|學生|家長|主管|助理|老闆|業務|客戶|行政|補習班)/i.test(text);
+    }
+
+    function hasFrequency(text) {
+      return /(daily|weekly|monthly|every|每|每天|每週|每周|每月|常常|反覆|一次|兩次|小時|分鐘)/i.test(text);
+    }
+
+    function hasCost(text) {
+      return /(hour|minute|money|cost|risk|stress|小時|分鐘|成本|花|錢|壓力|風險|麻煩|焦慮|怕|錯|漏)/i.test(text);
+    }
+
+    function analyzePrompt(prompt) {
+      const messages = [];
+      let score = 0;
+      const p = prompt.toLowerCase();
+
+      if (prompt.trim().length > 220) { score += 1; messages.push("Prompt has enough detail"); }
+      else messages.push("Prompt is too short; add user, scene, frequency, current method, and evidence request");
+
+      if (/不要|do not|don't|not/.test(p) && /(產品|product|商業模式|business model|mvp|app)/i.test(prompt)) {
+        score += 1; messages.push("Good: blocks product / business model / MVP thinking");
+      } else if (/(產品|product|商業模式|business model|mvp|app)/i.test(prompt)) {
+        messages.push("Warning: this prompt may jump to product or business model too early");
+      } else {
+        messages.push("Add a clear rule: do not design product, MVP, app, or business model");
+      }
+
+      if (/(人群|user|segment|誰|group|具體)/i.test(prompt)) { score += 1; messages.push("Asks for specific user groups"); }
+      else messages.push("Ask which specific user groups have this pain");
+
+      if (/(頻率|frequency|多久|場景|scene|when)/i.test(prompt)) { score += 1; messages.push("Asks for scene and frequency"); }
+      else messages.push("Ask when and how often this pain happens");
+
+      if (/(現在|current|解決|solution|excel|line|方法)/i.test(prompt)) { score += 1; messages.push("Asks about current solutions"); }
+      else messages.push("Ask how people solve it today");
+
+      if (/(證據|evidence|source|來源|論壇|評論|report|趨勢)/i.test(prompt)) { score += 1; messages.push("Asks for evidence and sources"); }
+      else messages.push("Ask for evidence: forums, reviews, reports, search trends");
+
+      if (/(訪談|interview|問題|question)/i.test(prompt)) { score += 1; messages.push("Asks for next interview questions"); }
+      else messages.push("Ask who to interview next and what to ask");
+
+      return { score, messages };
+    }
+
+    function promptScore(report) {
+      const className = report.score >= 6 ? "good" : report.score >= 4 ? "warn" : "bad";
+      return el("div", { class: `callout ${className === "good" ? "teal" : className === "warn" ? "sun" : "rose"}` }, [
+        el("strong", { text: `Prompt quality: ${report.score}/7` }),
+        document.createTextNode(report.score >= 6 ? "This is ready for Deep Research." : "Improve the prompt before students run it.")
+      ]);
+    }
+
+    function buildResearchPrompt() {
+      const pain = state.painSentence.trim() || "小型補習班老師每週要整理學生學習狀況，寫成家長回報訊息，常花很多時間，也很難寫得具體、有溫度";
+      const context = state.exampleContext.trim();
+      return `我想研究一個可能的痛點：「${pain}」。${context ? `\n背景補充：${context}` : ""}
+
+請不要幫我設計產品，也不要提出商業模式或 MVP。請只做痛點探索。
+
+請回答：
+1. 哪些具體人群最常遇到這個問題？請列 3–5 群。
+2. 這個問題通常在什麼場景發生？頻率多高？
+3. 他們現在怎麼解決？請列出常見方法與工具。
+4. 現有解法有哪些不滿？請分成時間成本、金錢成本、情緒壓力、風險或品質問題。
+5. 有哪些公開證據支持這個痛點？請找論壇、評論、社群討論、新聞、產業文章、工具評論、報告或搜尋趨勢。
+6. 這個痛點背後真正的 Job-to-be-Done 是什麼？
+7. 哪些可能是假痛點？也就是看起來很煩，但其實不夠頻繁、不夠痛、或已經被現有工具解決。
+8. 如果我要做真人訪談，最應該訪談哪 5 種人？每種人給 3 個訪談問題。
+
+最後請用 1–5 分評估：人群具體度、發生頻率、痛苦強度、現有解法不滿、證據可信度，並給總分。`;
+    }
+
+    function buildFollowupPrompt() {
+      return "請把上面的研究整理成一張「痛點判斷表」。欄位包含：目標人群、發生場景、發生頻率、現在解法、主要不滿、可查證證據、我應該訪談誰、訪談第一題。請用非常具體的中文，不要寫抽象名詞。最後挑出最值得優先研究的 1 個人群，並說明為什麼不是其他人群。判斷標準只看痛點強度與證據，不看商業模式。";
+    }
+
+    function totalScore() {
+      return Object.values(state.scores).reduce((sum, value) => sum + Number(value || 0), 0);
+    }
+
+    function scoreClass(total) {
+      if (total >= 20) return "good";
+      if (total >= 15) return "warn";
+      return "bad";
+    }
+
+    function scoreLabel(total) {
+      if (total >= 20) return "Worth interviewing";
+      if (total >= 15) return "Narrow and research more";
+      return "Probably a complaint";
+    }
+
+    function scoreDecision(total) {
+      if (total >= 20) return "This pain is strong enough for real interviews. Keep the PRD as a learning draft and validate with humans.";
+      if (total >= 15) return "Do not build yet. Narrow the target user or scene, then run research again.";
+      return "Stop before product thinking. The pain is too vague or weak right now.";
+    }
+
+    function generatePrd() {
+      const total = totalScore();
+      const decision = scoreDecision(total);
+      const today = new Date().toISOString().slice(0, 10);
+      state.prd = `# Basic AI Project PRD
+
+Generated: ${today}
+Workshop: Sunny Pain Point Discovery
+
+## 1. Project Working Title
+${titleFromPain()}
+
+## 2. Pain Point Statement
+${state.painSentence || "[Fill in the pain sentence from Step 1]"}
+
+## 3. Target User
+Primary user group:
+${extractTargetUser()}
+
+Possible adjacent users:
+- Decision maker
+- Daily operator
+- Person who receives the output
+
+## 4. Evidence Summary
+AI research notes:
+${trimBlock(state.aiResearch) || "[Paste or summarize Deep Research evidence here]"}
+
+Pain judgment table / notes:
+${trimBlock(state.painTable) || "[Paste the pain judgment table here]"}
+
+## 5. Pain Quality Score
+- User group specificity: ${state.scores.userSpecificity}/5
+- Frequency: ${state.scores.frequency}/5
+- Pain intensity: ${state.scores.painIntensity}/5
+- Current solution dissatisfaction: ${state.scores.currentDissatisfaction}/5
+- Evidence credibility: ${state.scores.evidenceCredibility}/5
+- Total: ${total}/25
+
+Decision: ${decision}
+
+## 6. Job-to-be-Done Hypothesis
+When the target user needs to complete this recurring task, they want a way to reduce manual effort, avoid missing important details, and produce a result that feels accurate and useful.
+
+## 7. AI Project Goal
+Help the target user turn messy inputs into a structured, useful output with less manual work, while keeping the user in control of final judgment.
+
+## 8. Non-Goals
+- Do not define pricing yet.
+- Do not define a full business model yet.
+- Do not build a full MVP before validating the pain.
+- Do not assume AI output is correct without human review.
+
+## 9. First Useful Workflow
+1. User provides raw notes, examples, or context.
+2. AI identifies key facts, missing information, and risk points.
+3. AI drafts a structured output.
+4. User reviews, edits, and approves.
+5. User records what was helpful or wrong for the next iteration.
+
+## 10. Required Inputs
+- Raw task content or notes
+- Target audience / recipient
+- Desired tone or format
+- Examples of good output if available
+- Things AI must avoid
+
+## 11. Basic Output
+- Structured draft
+- Key points summary
+- Missing information checklist
+- Confidence / uncertainty notes
+- Suggested human follow-up questions
+
+## 12. Validation Plan
+Interview 5 people from the highest-scoring user group.
+
+Interview questions:
+1. Tell me about the last time this happened.
+2. How often does it happen?
+3. What do you do today?
+4. What part is most frustrating or risky?
+5. What would make this meaningfully better?
+
+Success signal:
+At least 3 of 5 interviewees describe the same recurring pain and current workaround without being prompted.
+
+## 13. Risks and Assumptions
+- The pain may be too broad.
+- Existing tools may already solve enough of the problem.
+- Users may dislike AI-generated output unless they can edit it.
+- Evidence from AI research may be incomplete or biased.
+
+## 14. Next Step
+Do not build yet. Run the interview plan first, then update this PRD with real user quotes and revised pain score.`;
+      saveState();
+      if (state.step !== 5) state.step = 5;
+      render();
+    }
+
+    function titleFromPain() {
+      const text = state.painSentence.trim();
+      if (!text) return "[Working title]";
+      if (/補習班|老師|家長/.test(text)) return "AI Parent Update Assistant";
+      if (/客戶|業務|主管/.test(text)) return "AI Customer Follow-up Summary Assistant";
+      return "AI Workflow Assistant for Validated Pain Point";
+    }
+
+    function extractTargetUser() {
+      const text = `${state.painSentence} ${state.exampleContext} ${state.painTable}`;
+      const matches = text.match(/.{0,8}(老師|家長|學生|行政|業務|主管|助理|老闆|客戶|補習班).{0,12}/g);
+      return matches ? matches.slice(0, 3).join("\n") : "[Extract from research: who has this pain most often?]";
+    }
+
+    function trimBlock(text) {
+      if (!text.trim()) return "";
+      return text.trim().length > 1200 ? text.trim().slice(0, 1200) + "\n[Trimmed for PRD draft]" : text.trim();
+    }
+
+    async function copyText(text) {
+      await navigator.clipboard.writeText(text);
+    }
+
+    function copyFirstPrompt() {
+      copyText(state.firstPrompt || buildResearchPrompt());
+    }
+
+    function copyFollowupPrompt() {
+      if (!state.followupPrompt.trim()) state.followupPrompt = buildFollowupPrompt();
+      saveState();
+      copyText(state.followupPrompt);
+      render();
+    }
+
+    function copyPrd() {
+      if (!state.prd.trim()) generatePrd();
+      copyText(state.prd);
+    }
+
+    function downloadPrd() {
+      if (!state.prd.trim()) generatePrd();
+      const blob = new Blob([state.prd], { type: "text/markdown" });
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement("a");
+      a.href = url;
+      a.download = "sunny-ai-project-prd.md";
+      a.click();
+      URL.revokeObjectURL(url);
+    }
+
+    function loadExample() {
+      state = {
+        ...state,
+        painSentence: "小型補習班老師每週要整理學生學習狀況，寫成家長回報訊息，常花很多時間，也很難寫得具體、有溫度。",
+        audienceNotes: "Possible users: 補習班老師、班導師、行政老師、補習班老闆。Question: who feels the pain most often?",
+        exampleContext: "每位老師有 30–60 位學生。每週或每月需要回報。現在常用 Excel、Line、Google Sheet、紙本紀錄、複製貼上。主要成本是時間、品質壓力、家長溝通壓力、資料整理壓力。",
+        selectedTool: "ChatGPT Deep Research"
+      };
+      state.firstPrompt = buildResearchPrompt();
+      saveState();
+      render();
+    }
+
+    document.getElementById("prevBtn").addEventListener("click", () => {
+      if (state.step > 0) {
+        state.step -= 1;
+        saveState();
+        render();
+      }
+    });
+
+    document.getElementById("nextBtn").addEventListener("click", () => {
+      if (state.step < steps.length - 1) {
+        state.step += 1;
+        saveState();
+        render();
+      }
+    });
+
+    document.getElementById("generateTopBtn").addEventListener("click", generatePrd);
+    document.getElementById("loadExampleBtn").addEventListener("click", loadExample);
+    document.getElementById("clearBtn").addEventListener("click", () => {
+      if (confirm("Clear all workshop answers?")) {
+        state = structuredClone(defaultState);
+        localStorage.removeItem(STORAGE_KEY);
+        render();
+      }
+    });
+
+    render();
+  </script>
+</body>
+</html>
