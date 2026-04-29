@@ -1,0 +1,897 @@
+<!doctype html>
+<html lang="zh-Hant">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Sunny AOI Process Control Mind Map</title>
+    <style>
+:root {
+  --ink: #16323f;
+  --muted: #5d6f78;
+  --line: #d5e1e6;
+  --soft: #f4f8fa;
+  --blue: #0b6f91;
+  --blue-dark: #064762;
+  --green: #3f7d58;
+  --orange: #b45f20;
+  --red: #a33d36;
+  --white: #ffffff;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+  min-height: 100vh;
+  background: #e9eef1;
+  color: var(--ink);
+  font-family: Arial, "Microsoft JhengHei", sans-serif;
+  letter-spacing: 0;
+}
+
+button,
+input {
+  font: inherit;
+}
+
+.workspace {
+  width: min(1480px, calc(100vw - 32px));
+  margin: 16px auto;
+  min-height: calc(100vh - 32px);
+  background: var(--white);
+  border: 1px solid #cfdbe0;
+  display: grid;
+  grid-template-rows: auto auto 1fr;
+}
+
+.topbar {
+  display: flex;
+  align-items: flex-end;
+  justify-content: space-between;
+  gap: 24px;
+  padding: 24px 28px 18px;
+  border-bottom: 1px solid var(--line);
+}
+
+.eyebrow {
+  margin: 0 0 6px;
+  color: var(--blue);
+  font-size: 12px;
+  font-weight: 700;
+  text-transform: uppercase;
+}
+
+h1,
+h2,
+h3,
+p {
+  margin-top: 0;
+}
+
+h1 {
+  margin-bottom: 6px;
+  color: var(--blue-dark);
+  font-size: 34px;
+  line-height: 1.08;
+}
+
+.subtitle {
+  max-width: 900px;
+  margin: 0;
+  color: var(--muted);
+  font-size: 15px;
+  line-height: 1.5;
+}
+
+.signal-strip {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(90px, 1fr));
+  gap: 1px;
+  border: 1px solid var(--line);
+  background: var(--line);
+  min-width: 360px;
+}
+
+.signal-strip div {
+  background: #f8fbfc;
+  padding: 12px 14px;
+}
+
+.signal-strip span {
+  display: block;
+  color: var(--muted);
+  font-size: 11px;
+  margin-bottom: 5px;
+}
+
+.signal-strip strong {
+  color: var(--blue-dark);
+  font-size: 16px;
+}
+
+.signal-strip a {
+  color: inherit;
+  text-decoration: none;
+  border-bottom: 1px solid currentColor;
+}
+
+.signal-strip a:hover {
+  color: var(--orange);
+}
+
+.control-row {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  padding: 12px 28px;
+  border-bottom: 1px solid var(--line);
+  background: #f8fbfc;
+}
+
+.tab {
+  border: 1px solid #b8cbd3;
+  background: #fff;
+  color: var(--blue-dark);
+  padding: 8px 13px;
+  min-height: 38px;
+  cursor: pointer;
+  font-weight: 700;
+}
+
+.tab.active {
+  background: var(--blue-dark);
+  color: #fff;
+  border-color: var(--blue-dark);
+}
+
+.canvas-view {
+  display: none;
+  padding: 24px 28px 28px;
+}
+
+.canvas-view.active {
+  display: block;
+}
+
+.section-head {
+  margin-bottom: 20px;
+}
+
+.section-head h2 {
+  margin: 0;
+  color: var(--blue-dark);
+  font-size: 28px;
+}
+
+.map-shell {
+  position: relative;
+  min-height: 640px;
+  border: 1px solid var(--line);
+  background:
+    linear-gradient(90deg, rgba(11, 111, 145, 0.06) 1px, transparent 1px),
+    linear-gradient(rgba(11, 111, 145, 0.06) 1px, transparent 1px);
+  background-size: 48px 48px;
+}
+
+.map-center {
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  width: 300px;
+  min-height: 160px;
+  transform: translate(-50%, -50%);
+  border: 2px solid var(--blue-dark);
+  background: #fff;
+  display: grid;
+  place-content: center;
+  text-align: center;
+  padding: 24px;
+  box-shadow: 0 12px 28px rgba(6, 71, 98, 0.12);
+}
+
+.map-center p {
+  color: var(--muted);
+  margin-bottom: 6px;
+  font-size: 13px;
+}
+
+.map-center h2 {
+  margin-bottom: 10px;
+  color: var(--blue-dark);
+  font-size: 24px;
+}
+
+.map-center span {
+  color: var(--green);
+  font-weight: 700;
+}
+
+.node {
+  position: absolute;
+  width: 190px;
+  min-height: 64px;
+  border: 1px solid #9db9c5;
+  background: #fff;
+  color: var(--ink);
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 12px;
+  text-align: left;
+  font-weight: 700;
+  box-shadow: 0 8px 18px rgba(22, 50, 63, 0.08);
+}
+
+.node::after {
+  content: "";
+  position: absolute;
+  border-top: 2px solid rgba(11, 111, 145, 0.45);
+  width: 90px;
+  top: 50%;
+}
+
+.node span {
+  display: grid;
+  place-items: center;
+  width: 32px;
+  height: 32px;
+  flex: 0 0 auto;
+  background: var(--blue);
+  color: #fff;
+  font-size: 13px;
+}
+
+.node.active,
+.node:hover {
+  border-color: var(--orange);
+  box-shadow: 0 10px 24px rgba(180, 95, 32, 0.18);
+}
+
+.n1 { left: 9%; top: 10%; }
+.n2 { left: 40%; top: 7%; }
+.n3 { right: 9%; top: 10%; }
+.n4 { right: 6%; top: 43%; }
+.n5 { right: 10%; bottom: 11%; }
+.n6 { left: 41%; bottom: 7%; }
+.n7 { left: 8%; bottom: 11%; }
+.n8 { left: 5%; top: 43%; }
+
+.n1::after,
+.n7::after,
+.n8::after { right: -90px; }
+.n3::after,
+.n4::after,
+.n5::after { left: -90px; }
+.n2::after,
+.n6::after { display: none; }
+
+.insight-panel {
+  margin-top: 16px;
+  display: grid;
+  grid-template-columns: 1.1fr 1fr 1fr;
+  gap: 14px;
+}
+
+.detail-block,
+.roadmap article,
+.roi-formula,
+.score-model,
+.qa-card,
+.qa-side,
+.pitch-grid article {
+  border: 1px solid var(--line);
+  background: #fff;
+}
+
+.detail-block {
+  padding: 16px;
+  min-height: 160px;
+}
+
+.detail-block h3 {
+  color: var(--blue-dark);
+  margin-bottom: 8px;
+  font-size: 18px;
+}
+
+.detail-block p,
+.detail-block li {
+  color: var(--ink);
+  font-size: 14px;
+  line-height: 1.48;
+}
+
+.detail-block ul {
+  margin: 10px 0 0;
+  padding-left: 18px;
+}
+
+.roadmap {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 14px;
+}
+
+.roadmap article {
+  padding: 18px;
+  border-top: 5px solid var(--blue);
+}
+
+.roadmap small {
+  color: var(--orange);
+  font-weight: 700;
+}
+
+.roadmap h3,
+.roi-formula h3,
+.score-model h3,
+.qa-card h3,
+.qa-side h3,
+.pitch-grid h3 {
+  margin: 6px 0 8px;
+  color: var(--blue-dark);
+}
+
+.roadmap p,
+.roadmap li,
+.roi-formula p,
+.qa-card p,
+.qa-card li,
+.qa-side p,
+.pitch-grid p {
+  color: var(--ink);
+  font-size: 14px;
+  line-height: 1.5;
+}
+
+.roadmap ul {
+  margin: 10px 0 0;
+  padding-left: 18px;
+}
+
+.flow-layout {
+  display: grid;
+  grid-template-columns: minmax(320px, 42%) 1fr;
+  gap: 18px;
+  align-items: start;
+}
+
+.case-shot {
+  width: 100%;
+  border: 1px solid var(--line);
+  object-fit: cover;
+  aspect-ratio: 16 / 10;
+}
+
+.flow-list {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 10px;
+}
+
+.flow-step {
+  min-height: 132px;
+  border: 1px solid var(--line);
+  border-left: 5px solid var(--blue);
+  padding: 12px;
+  background: #fff;
+}
+
+.flow-step strong {
+  color: var(--blue-dark);
+}
+
+.flow-step p {
+  margin: 8px 0 0;
+  color: var(--muted);
+  font-size: 13px;
+  line-height: 1.45;
+}
+
+.roi-grid {
+  display: grid;
+  grid-template-columns: 0.95fr 1.25fr;
+  gap: 16px;
+}
+
+.roi-formula,
+.score-model {
+  padding: 18px;
+}
+
+.score-row {
+  display: grid;
+  grid-template-columns: 180px 1fr 44px;
+  gap: 10px;
+  align-items: center;
+  margin: 12px 0;
+}
+
+.bar {
+  height: 12px;
+  background: #e7eef1;
+  position: relative;
+}
+
+.bar span {
+  position: absolute;
+  left: 0;
+  top: 0;
+  bottom: 0;
+  background: var(--green);
+}
+
+.qa-layout {
+  display: grid;
+  grid-template-columns: 1fr 360px;
+  gap: 16px;
+}
+
+.qa-list {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 12px;
+}
+
+.qa-card {
+  padding: 15px;
+  border-top: 4px solid var(--blue);
+}
+
+.qa-card .answer {
+  margin-top: 10px;
+  padding-top: 10px;
+  border-top: 1px solid var(--line);
+  color: var(--green);
+  font-weight: 700;
+}
+
+.qa-side {
+  padding: 14px;
+  align-self: start;
+}
+
+.qa-side img {
+  width: 100%;
+  border: 1px solid var(--line);
+  margin-bottom: 12px;
+}
+
+.pitch-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 14px;
+}
+
+.pitch-grid article {
+  padding: 18px;
+  min-height: 170px;
+}
+
+.pitch-grid span {
+  display: grid;
+  place-items: center;
+  width: 34px;
+  height: 34px;
+  background: var(--blue-dark);
+  color: #fff;
+  font-weight: 700;
+  margin-bottom: 12px;
+}
+
+@media (max-width: 980px) {
+  .topbar,
+  .flow-layout,
+  .roi-grid,
+  .qa-layout {
+    grid-template-columns: 1fr;
+    display: grid;
+  }
+
+  .signal-strip {
+    min-width: 0;
+    width: 100%;
+  }
+
+  .roadmap,
+  .flow-list,
+  .qa-list,
+  .pitch-grid,
+  .insight-panel {
+    grid-template-columns: 1fr;
+  }
+
+  .map-shell {
+    min-height: auto;
+    display: grid;
+    gap: 10px;
+    padding: 12px;
+  }
+
+  .map-center,
+  .node {
+    position: static;
+    transform: none;
+    width: 100%;
+  }
+
+  .node::after {
+    display: none;
+  }
+}
+
+    .placeholder,.agent-placeholder{display:grid;place-items:center;text-align:center;gap:8px;min-height:260px;background:#f4f8fa;border:1px solid #d5e1e6;color:#064762;padding:24px}.placeholder span,.agent-placeholder span{display:block;color:#5d6f78;font-size:14px}.agent-placeholder{min-height:180px;margin-bottom:12px}
+    </style>
+  </head>
+  <body>
+    <main class="workspace">
+      <section class="topbar" aria-label="project context">
+        <div>
+          <p class="eyebrow">AOI Process Control Tool BU</p>
+          <h1>Sunny AI Specialist Mind Map</h1>
+          <p class="subtitle">AALC 大型機櫃組裝作為示範案例，說明產品結構、關鍵風險、ROI、競品補強與 Sunny 可貢獻的解法。</p>
+        </div>
+        <div class="signal-strip" aria-label="business signals">
+          <div><span>Use case</span><strong>AALC</strong></div>
+          <div><span>Goal</span><strong>正 ROI PoC</strong></div>
+          <div><span>GitHub</span><strong><a href="https://github.com/hpyuan1220" target="_blank" rel="noopener">hpyuan1220</a></strong></div>
+        </div>
+      </section>
+
+      <section class="control-row" aria-label="view controls">
+        <button class="tab active" data-view="map">Mind Map</button>
+        <button class="tab" data-view="prd">PRD Roadmap</button>
+        <button class="tab" data-view="flow">AALC Flow</button>
+        <button class="tab" data-view="roi">ROI Lens</button>
+        <button class="tab" data-view="qa">Q&A Model</button>
+        <button class="tab" data-view="pitch">PPT Story</button>
+      </section>
+
+      <section class="canvas-view active" id="map">
+        <div class="map-shell">
+          <div class="map-center">
+            <p>Product BU</p>
+            <h2>AOI AI Process Control Tool</h2>
+            <span>SOP + Vision + Event + ROI</span>
+          </div>
+          <button class="node n1" data-node="problem"><span>01</span>BU Problem</button>
+          <button class="node n2" data-node="aalc"><span>02</span>AALC Case</button>
+          <button class="node n3" data-node="critical"><span>03</span>Critical Points</button>
+          <button class="node n4" data-node="sunny"><span>04</span>Sunny Contribution</button>
+          <button class="node n5" data-node="competitor"><span>05</span>Competitor Gap</button>
+          <button class="node n6" data-node="roi"><span>06</span>ROI Gate</button>
+          <button class="node n7" data-node="qa"><span>07</span>Q&A Model</button>
+          <button class="node n8" data-node="roadmap"><span>08</span>Extension Roadmap</button>
+        </div>
+        <aside class="insight-panel" id="nodePanel" aria-live="polite"></aside>
+      </section>
+
+      <section class="canvas-view" id="prd">
+        <div class="section-head">
+          <p class="eyebrow">Preliminary PRD extension</p>
+          <h2>從第一期工具走向產品化路線圖</h2>
+        </div>
+        <div class="roadmap">
+          <article>
+            <small>Phase 1</small>
+            <h3>SOP Event Control</h3>
+            <p>把 AALC SOP 轉成 Obj / Action / Target / Station / Tolerance / Recovery 的事件規格。</p>
+            <ul>
+              <li>影像輸入與事件切段</li>
+              <li>OD / AR / sequence check</li>
+              <li>Shadow Run + HITL</li>
+            </ul>
+          </article>
+          <article>
+            <small>Phase 2</small>
+            <h3>Traceability & Evidence</h3>
+            <p>把 SN、工單、SOP、影像、AI 判斷、人工複核與 MES event 串成證據鏈。</p>
+            <ul>
+              <li>Evidence Registry</li>
+              <li>SN-SOP 綁定</li>
+              <li>RMA / audit replay</li>
+            </ul>
+          </article>
+          <article>
+            <small>Phase 3</small>
+            <h3>ROI Decision Dashboard</h3>
+            <p>將重工節省、cycle time、誤報成本、追溯時間與 payback period 變成主管決策語言。</p>
+            <ul>
+              <li>Baseline collector</li>
+              <li>PoC scoring</li>
+              <li>Scale-up gate</li>
+            </ul>
+          </article>
+          <article>
+            <small>Phase 4</small>
+            <h3>Continuous Learning Platform</h3>
+            <p>管理模型、資料、站點設定、漂移、retrain trigger 與 rollback。</p>
+            <ul>
+              <li>Model / dataset version</li>
+              <li>Inspection configuration</li>
+              <li>Multi-line rollout</li>
+            </ul>
+          </article>
+        </div>
+      </section>
+
+      <section class="canvas-view" id="flow">
+        <div class="section-head">
+          <p class="eyebrow">AALC example</p>
+          <h2>ACME 專案流程與關鍵判斷點</h2>
+        </div>
+        <div class="flow-layout">
+          <div class="case-shot placeholder"><strong>AALC 大型機櫃組裝</strong><span>示範案例：高單價、複雜工序、重工/RMA 風險</span></div>
+          <div class="flow-list" id="flowList"></div>
+        </div>
+      </section>
+
+      <section class="canvas-view" id="roi">
+        <div class="section-head">
+          <p class="eyebrow">Positive ROI finder</p>
+          <h2>第一個 PoC 不選最難，選最容易證明價值</h2>
+        </div>
+        <div class="roi-grid">
+          <article class="roi-formula">
+            <h3>ROI 基本式</h3>
+            <p><strong>年度效益</strong> = 重工節省 + RMA 節省 + 人力節省 + 停線等待節省 + 追溯時間節省</p>
+            <p><strong>年度成本</strong> = 硬體 + 軟體 + 導入 + 標註 + 維運 + retrain + 教育</p>
+            <p><strong>ROI</strong> = (年度效益 - 年度成本) / 年度成本</p>
+          </article>
+          <article class="score-model">
+            <h3>PoC Scoring Model</h3>
+            <div id="roiScores"></div>
+          </article>
+        </div>
+      </section>
+
+      <section class="canvas-view" id="qa">
+        <div class="section-head">
+          <p class="eyebrow">Q&A decision model</p>
+          <h2>每個關鍵點都要能被追問、被驗證、被解決</h2>
+        </div>
+        <div class="qa-layout">
+          <div class="qa-list" id="qaList"></div>
+          <aside class="qa-side">
+            <div class="agent-placeholder"><strong>RD Copilot Evidence</strong><span>Multi-Agent + RAG + Evidence Registry + HITL</span></div>
+            <h3>Sunny 的可轉移能力</h3>
+            <p>RD Copilot 的問題拆解、Evidence Registry、Multi-Agent、HITL 和 MLOps 可以轉成 AOI process-control 的 Q&A 判斷模型。</p>
+          </aside>
+        </div>
+      </section>
+
+      <section class="canvas-view" id="pitch">
+        <div class="section-head">
+          <p class="eyebrow">PPT storyline</p>
+          <h2>這個 web app 可以轉成 6 張 PPT</h2>
+        </div>
+        <div class="pitch-grid">
+          <article><span>1</span><h3>BU Problem</h3><p>AOI BU 要解的是製程控制，不只是單張影像檢測。</p></article>
+          <article><span>2</span><h3>AALC Example</h3><p>用大型機櫃組裝說明高單價、複雜工序、重工與 RMA 風險。</p></article>
+          <article><span>3</span><h3>Critical Flow</h3><p>資料蒐集、SOP event、標註、測試、Judge、Deploy 是成敗節點。</p></article>
+          <article><span>4</span><h3>Sunny Fit</h3><p>Sunny 能把 RD Copilot 能力轉成 AOI process-control tool 架構。</p></article>
+          <article><span>5</span><h3>Competitor Gap</h3><p>用 Siemens、Cognex、LandingAI、Instrumental 對照 ACME 應補強項。</p></article>
+          <article><span>6</span><h3>ROI Roadmap</h3><p>第一期先做高成本重工攔截，再擴到 traceability、dashboard、continuous learning。</p></article>
+        </div>
+      </section>
+    </main>
+
+    <script>
+const nodeDetails = {
+  problem: {
+    title: "BU Problem",
+    point: "AOI Process Control Tool BU 要解的是製程控制，不只是單點 AOI。",
+    why: [
+      "現場痛點是錯誤發現太晚、重工成本高、RMA 風險高、追溯慢。",
+      "第一期 PRD 應把工具定義為 SOP event control + image evidence + real-time correction。",
+      "Sunny 要展現他能把產品 BU 的問題翻成可驗收流程。"
+    ],
+    sunny: "我會先問這個工具要讓哪一類錯誤變少，而不是先問要用哪個模型。"
+  },
+  aalc: {
+    title: "AALC Case",
+    point: "AALC 大型機櫃組裝是示範案例，不是 Sunny 申請的 BU 本身。",
+    why: [
+      "它適合用來說明高單價、複雜工序、人工差異、遮擋與重工風險。",
+      "案例可以對應 ACME 流程：資料蒐集、資料處理、標註、模型、SOP 測試、Judge、Deploy。",
+      "PPT 要清楚說：AALC 是 example，真正目標是 AOI process control tool productization。"
+    ],
+    sunny: "我會用 AALC 來驗證這套工具邏輯，但我的貢獻是給整個 AOI process-control BU。"
+  },
+  critical: {
+    title: "Critical Points",
+    point: "最關鍵不是 deploy，而是 deploy 前的資料、SOP event、標註、測試與 Judge。",
+    why: [
+      "資料蒐集要覆蓋 operator、shift、normal、abnormal、rework、boundary case。",
+      "SOP 要轉成 Obj / Action / Target / Condition / Tolerance / Recovery。",
+      "Judge 要有 go/no-go：漏檢、誤報、延遲、事件上拋、現場接受度、ROI baseline。"
+    ],
+    sunny: "我會先把關鍵節點變成 checklist，否則 AI demo 成功也不代表產品能擴線。"
+  },
+  sunny: {
+    title: "Sunny Contribution",
+    point: "Sunny 的價值是 AI system architect，不是單純 CV model trainer。",
+    why: [
+      "RD Copilot 證明他能處理模糊需求、Evidence Registry、Multi-Agent、RAG、HITL。",
+      "MLOps 經驗可以轉成 model version、dataset version、drift、retrain、rollback。",
+      "PM / 製程背景讓他能把 AI 指標翻成重工、RMA、cycle time 與 ROI。"
+    ],
+    sunny: "我不會假裝自己什麼 CV 都會，但我能讓 CV 模型變成產線可用、可維運的工具。"
+  },
+  competitor: {
+    title: "Competitor Gap",
+    point: "競品已把部分能力產品化，ACME 可轉成自己的 roadmap。",
+    why: [
+      "Siemens：快速導入、少量 good samples、PLC/MES。",
+      "Cognex：defect detection、assembly verification、OCR、on-device processing。",
+      "LandingAI：Inspection Point、PLC workflow、continuous learning。",
+      "Instrumental：SN traceability、image/video evidence、real-time manufacturing record。"
+    ],
+    sunny: "我會把競品當作產品成熟度參考，不是照抄，而是補 ACME 的方法論。"
+  },
+  roi: {
+    title: "ROI Gate",
+    point: "第一個 PoC 不選最難，選最可能快速正 ROI 的點。",
+    why: [
+      "正 ROI 條件：錯誤成本高、AI 看得到、現場能即時修正、資料容易收、導入阻力低。",
+      "AALC 第一優先可選高單價關鍵組裝步驟的即時糾錯。",
+      "ROI dashboard 要追重工節省、誤報成本、RMA 風險、追溯時間、payback period。"
+    ],
+    sunny: "我會把 ROI 當成選點工具，不是財務包裝。"
+  },
+  qa: {
+    title: "Q&A Model",
+    point: "每個 critical point 都要能回答為什麼重要、怎麼驗證、出問題怎麼修。",
+    why: [
+      "Q：資料夠嗎？A：看 coverage matrix，不只看影片數量。",
+      "Q：AI 判錯怎麼辦？A：Shadow Run + HITL + feedback loop。",
+      "Q：如何擴線？A：data gate、SOP gate、model gate、business gate。"
+    ],
+    sunny: "我會用 Q&A 把不確定性攤開，讓主管知道風險在哪裡、解法在哪裡。"
+  },
+  roadmap: {
+    title: "Extension Roadmap",
+    point: "第一期 PRD 後要延伸成可複製產品平台。",
+    why: [
+      "Phase 1：SOP Event Control。",
+      "Phase 2：Traceability & Evidence Registry。",
+      "Phase 3：ROI Decision Dashboard。",
+      "Phase 4：Continuous Learning & Multi-line Rollout。"
+    ],
+    sunny: "我會把產品 roadmap 設計成能從 AALC 一站，複製到下一站、下一線、下一個客戶。"
+  }
+};
+
+const flowSteps = [
+  ["資料蒐集", "覆蓋不同 operator、shift、normal / abnormal / rework / boundary case。"],
+  ["資料處理", "影片切段、frame sampling、SN / 工單 / station metadata。"],
+  ["資料篩選", "用清晰度、視角、遮擋率、事件完整度做 data quality gate。"],
+  ["資料標註", "AI 預標，專家複核灰區，低信心樣本回收。"],
+  ["模型訓練", "拆成 object、action、sequence、position、anomaly 多個節點。"],
+  ["模型測試", "Offline test、Shadow Run、line-side test，不只看 accuracy。"],
+  ["SOP 測試", "逐項驗證 Obj / Action / Target / tolerance / recovery。"],
+  ["Judge", "用漏檢、誤報、延遲、事件上拋、ROI baseline 判斷 go/no-go。"],
+  ["Deploy", "加上 drift monitoring、retrain trigger、rollback、health check。"]
+];
+
+const roiScores = [
+  ["Pain Value", 95],
+  ["AI Detectability", 84],
+  ["Data Readiness", 72],
+  ["Actionability", 88],
+  ["Deployment Friction", 64]
+];
+
+const qaItems = [
+  {
+    q: "Q1. 第一個 PoC 要選哪個點？",
+    checks: ["錯一次成本高", "AI 看得到", "現場能立即修正", "資料可收"],
+    a: "先選高單價關鍵組裝步驟的即時糾錯，不先做整線 SOP。"
+  },
+  {
+    q: "Q2. 怎麼證明資料夠？",
+    checks: ["coverage matrix", "normal / abnormal", "operator / shift", "boundary case"],
+    a: "資料夠不夠看代表性，不看影片數量。"
+  },
+  {
+    q: "Q3. AI 判錯誰負責？",
+    checks: ["Shadow Run", "HITL", "override rule", "review owner"],
+    a: "上線前先不改變現場決策，用人工複核建立信任。"
+  },
+  {
+    q: "Q4. 怎麼避免三個月後模型退化？",
+    checks: ["model version", "dataset version", "drift signal", "rollback"],
+    a: "把 deploy 視為 lifecycle，不是結案。"
+  },
+  {
+    q: "Q5. 競品啟示是什麼？",
+    checks: ["quick deployment", "task library", "inspection point", "traceability"],
+    a: "ACME 需要把功能變成可複製產品方法論。"
+  },
+  {
+    q: "Q6. Sunny 加入的價值？",
+    checks: ["problem framing", "RAG / agent", "HITL", "MLOps", "ROI language"],
+    a: "讓 CV 模型成為可驗收、可維運、可擴線的 AOI process-control tool。"
+  }
+];
+
+function renderPanel(key = "problem") {
+  const item = nodeDetails[key];
+  const panel = document.getElementById("nodePanel");
+  panel.innerHTML = `
+    <div class="detail-block">
+      <h3>${item.title}</h3>
+      <p>${item.point}</p>
+    </div>
+    <div class="detail-block">
+      <h3>Critical Logic</h3>
+      <ul>${item.why.map((line) => `<li>${line}</li>`).join("")}</ul>
+    </div>
+    <div class="detail-block">
+      <h3>Sunny Tone</h3>
+      <p>${item.sunny}</p>
+    </div>
+  `;
+}
+
+function renderFlow() {
+  const list = document.getElementById("flowList");
+  list.innerHTML = flowSteps.map(([name, text], index) => `
+    <article class="flow-step">
+      <strong>${String(index + 1).padStart(2, "0")} ${name}</strong>
+      <p>${text}</p>
+    </article>
+  `).join("");
+}
+
+function renderROI() {
+  const scores = document.getElementById("roiScores");
+  scores.innerHTML = roiScores.map(([label, value]) => `
+    <div class="score-row">
+      <strong>${label}</strong>
+      <div class="bar" aria-label="${label} ${value}"><span style="width:${value}%"></span></div>
+      <b>${value}</b>
+    </div>
+  `).join("");
+}
+
+function renderQA() {
+  const list = document.getElementById("qaList");
+  list.innerHTML = qaItems.map((item) => `
+    <article class="qa-card">
+      <h3>${item.q}</h3>
+      <ul>${item.checks.map((check) => `<li>${check}</li>`).join("")}</ul>
+      <p class="answer">${item.a}</p>
+    </article>
+  `).join("");
+}
+
+document.querySelectorAll(".tab").forEach((tab) => {
+  tab.addEventListener("click", () => {
+    document.querySelectorAll(".tab").forEach((t) => t.classList.remove("active"));
+    document.querySelectorAll(".canvas-view").forEach((view) => view.classList.remove("active"));
+    tab.classList.add("active");
+    document.getElementById(tab.dataset.view).classList.add("active");
+  });
+});
+
+document.querySelectorAll(".node").forEach((node) => {
+  node.addEventListener("click", () => {
+    document.querySelectorAll(".node").forEach((n) => n.classList.remove("active"));
+    node.classList.add("active");
+    renderPanel(node.dataset.node);
+  });
+});
+
+renderPanel("problem");
+renderFlow();
+renderROI();
+renderQA();
+document.querySelector('[data-node="problem"]').classList.add("active");
+
+    </script>
+  </body>
+</html>
