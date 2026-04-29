@@ -1,0 +1,145 @@
+<!doctype html>
+<html lang="zh-Hant">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Synergy AI 線上諮詢問卷 Demo</title>
+    <link rel="stylesheet" href="styles.css" />
+  </head>
+  <body>
+    <main class="app-shell">
+      <section class="topbar" aria-label="Demo overview">
+        <div>
+          <p class="eyebrow">M2 / M3 Demo Flow</p>
+          <h1>Synergy AI 線上諮詢問卷</h1>
+        </div>
+        <div class="status-card">
+          <span id="completionLabel">Phase 1 of 3</span>
+          <div class="progress-track" aria-hidden="true">
+            <span id="progressBar"></span>
+          </div>
+        </div>
+      </section>
+
+      <nav class="phase-tabs" aria-label="Questionnaire phases">
+        <button class="phase-tab active" data-phase="1" type="button">1 快速分流</button>
+        <button class="phase-tab" data-phase="2" type="button" disabled>2 六大核心</button>
+        <button class="phase-tab" data-phase="3" type="button" disabled>3 動態建議</button>
+      </nav>
+
+      <section class="workspace">
+        <aside class="insight-panel">
+          <h2>AI 即時判斷</h2>
+          <div id="tagCloud" class="tag-cloud">
+            <span>等待填寫</span>
+          </div>
+          <div class="divider"></div>
+          <h3>六大關注排序</h3>
+          <ol id="rankingList" class="ranking-list">
+            <li>尚未產生</li>
+          </ol>
+        </aside>
+
+        <section class="question-panel">
+          <form id="questionnaireForm">
+            <section class="phase-view active" data-view="1">
+              <div class="section-heading">
+                <p class="eyebrow">Phase 1</p>
+                <h2>快速分流</h2>
+                <p>先了解年齡、職業型態與主要健康關注，讓後面的問卷更精準。</p>
+              </div>
+
+              <div class="field-grid">
+                <label class="field">
+                  <span>年齡區間</span>
+                  <select name="age" required>
+                    <option value="">請選擇</option>
+                    <option value="young">18-30</option>
+                    <option value="adult">31-45</option>
+                    <option value="mid">46-60</option>
+                    <option value="senior">60+</option>
+                  </select>
+                </label>
+
+                <label class="field">
+                  <span>職業/生活型態</span>
+                  <select name="occupation" required>
+                    <option value="">請選擇</option>
+                    <option value="sedentary">久坐辦公</option>
+                    <option value="standing">久站服務</option>
+                    <option value="shift">輪班/夜班</option>
+                    <option value="pressure">高壓管理/業務</option>
+                    <option value="care">家庭照護</option>
+                    <option value="other">其他</option>
+                  </select>
+                </label>
+              </div>
+
+              <fieldset class="choice-group">
+                <legend>主要健康關注</legend>
+                <div class="choice-grid">
+                  <label><input type="radio" name="primaryConcern" value="weight" required />減重/體脂</label>
+                  <label><input type="radio" name="primaryConcern" value="energy" />疲勞/精神不好</label>
+                  <label><input type="radio" name="primaryConcern" value="sleep" />睡眠</label>
+                  <label><input type="radio" name="primaryConcern" value="digestion" />消化/腸胃</label>
+                  <label><input type="radio" name="primaryConcern" value="edema" />水腫/循環</label>
+                  <label><input type="radio" name="primaryConcern" value="cycle" />女性週期/荷爾蒙</label>
+                  <label><input type="radio" name="primaryConcern" value="bowel" />排便/腸道</label>
+                </div>
+              </fieldset>
+
+              <div class="actions">
+                <button class="primary-action" type="button" data-next="2">下一步</button>
+              </div>
+            </section>
+
+            <section class="phase-view" data-view="2">
+              <div class="section-heading">
+                <p class="eyebrow">Phase 2</p>
+                <h2>六大核心問題</h2>
+                <p>依附錄建議順序：壓力 → 睡眠 → 消化 → 手腳冰冷 → 水腫 → 排便。</p>
+              </div>
+
+              <div id="coreQuestions" class="core-questions"></div>
+
+              <div class="actions">
+                <button class="secondary-action" type="button" data-prev="1">返回</button>
+                <button class="primary-action" type="button" data-next="3">產生動態追問</button>
+              </div>
+            </section>
+
+            <section class="phase-view" data-view="3">
+              <div class="section-heading">
+                <p class="eyebrow">Phase 3</p>
+                <h2>動態追問與樣品建議</h2>
+                <p>Demo 會根據前兩階段答案，只顯示最相關的追問與 SKU 樣品建議。</p>
+              </div>
+
+              <div id="followUpArea" class="follow-up-area"></div>
+
+              <div class="recommendation-band">
+                <div>
+                  <p class="eyebrow">AI Recommendation Preview</p>
+                  <h3>樣品/SKU 建議</h3>
+                </div>
+                <div id="skuCards" class="sku-cards"></div>
+              </div>
+
+              <div class="summary-box">
+                <h3>給團隊長檢視</h3>
+                <p id="leaderSummary">完成問卷後，這裡會整理答案摘要、推薦理由與可人工調整的方向。</p>
+              </div>
+
+              <div class="actions">
+                <button class="secondary-action" type="button" data-prev="2">返回</button>
+                <button class="primary-action" type="button" id="refreshRecommendations">重新整理建議</button>
+              </div>
+            </section>
+          </form>
+        </section>
+      </section>
+    </main>
+
+    <script src="app.js"></script>
+  </body>
+</html>
